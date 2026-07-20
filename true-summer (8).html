@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>True Summer Colour Palette</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg: #F0F2F7; --text: #111827; --accent: #7B6EA6; --silver: #8891AA; --muted: #4A5068; --card-bg: #E3E6EF; --tap-min: 44px; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body { background:var(--bg); color:var(--text); font-family:'Jost',sans-serif; font-weight:300; min-height:100vh; padding:0 0 80px; font-size:16px; line-height:1.5; }
+  .header { text-align:center; padding:28px 20px 20px; position:relative; }
+  .header::after { content:''; display:block; width:40px; height:1px; background:var(--silver); margin:14px auto 0; }
+  .header-label { font-family:'Jost',sans-serif; font-weight:400; font-size:10px; letter-spacing:0.3em; text-transform:uppercase; color:#4A5068; margin-bottom:8px; }
+  .header h1 { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(52px,16vw,88px); line-height:1.05; letter-spacing:-0.01em; background:linear-gradient(135deg,#7B9FD4 0%,#A07BC0 35%,#C47BA8 65%,#8FAFD8 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .header h1 span { font-style:italic; }
+  .header-sub { margin-top:10px; font-size:12px; letter-spacing:0.04em; color:#4A5068; }
+  .tabs-wrapper { position:sticky; top:0; z-index:100; background:var(--bg); border-bottom:1px solid rgba(17,24,39,0.08); }
+  .tabs { display:flex; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scroll-behavior:smooth; padding:0 12px; scrollbar-width:none; -ms-overflow-style:none; }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab { background:none; border:none; border-bottom:3px solid transparent; color:#4A5068; font-family:'Jost',sans-serif; font-size:11px; font-weight:400; letter-spacing:0.12em; text-transform:uppercase; padding:14px 14px 11px; cursor:pointer; transition:all 0.2s; white-space:nowrap; flex-shrink:0; min-height:var(--tap-min); }
+  .tab:hover { color:var(--text); }
+  .tab.active { color:var(--text); border-bottom-color:var(--text); font-weight:500; }
+  .section { display:none; padding:20px 16px 0; max-width:960px; margin:0 auto; animation:fadeUp 0.3s ease both; }
+  .section.visible { display:block; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .section-title { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:26px; letter-spacing:0.02em; margin-bottom:6px; color:var(--text); }
+  .section-desc { font-size:13px; letter-spacing:0.03em; color:#4A5068; margin-bottom:20px; line-height:1.6; }
+  .all-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  @media(min-width:480px){.all-grid{grid-template-columns:repeat(4,1fr);}}
+  @media(min-width:700px){.all-grid{grid-template-columns:repeat(5,1fr);gap:10px;}}
+  .all-grid .swatch-card { cursor:pointer; border-radius:6px; overflow:hidden; background:var(--card-bg); box-shadow:0 1px 4px rgba(17,24,39,0.08); transition:transform 0.15s,box-shadow 0.15s; -webkit-tap-highlight-color:transparent; }
+  .all-grid .swatch-card:active { transform:scale(0.97); }
+  .all-grid .swatch-card .swatch-colour { aspect-ratio:1; width:100%; }
+  .all-grid .swatch-card .swatch-base { padding:6px 7px 8px; }
+  .all-grid .swatch-card .swatch-name { font-family:'Jost',sans-serif; font-size:9px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--text); line-height:1.3; }
+  .all-grid .swatch-card .swatch-hex { font-size:9px; letter-spacing:0.06em; color:var(--muted); margin-top:2px; }
+  .dna-banner { background:var(--text); color:var(--bg); border-radius:6px; padding:18px 16px; margin-bottom:16px; display:grid; grid-template-columns:1fr; gap:14px; }
+  @media(min-width:560px){.dna-banner{grid-template-columns:repeat(3,1fr);gap:10px;}}
+  .dna-key { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--silver); margin-bottom:4px; }
+  .dna-val { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:300; line-height:1.2; }
+  .dna-desc { font-size:12px; color:rgba(240,242,247,0.65); margin-top:4px; line-height:1.5; }
+  .rule-strip { background:var(--card-bg); border-left:3px solid var(--silver); padding:16px 18px; margin-bottom:20px; border-radius:0 6px 6px 0; }
+  .rule-strip p { font-size:14px; line-height:1.7; color:var(--text); }
+  .rule-strip strong { font-weight:500; color:var(--accent); }
+  .guide-note { background:rgba(123,110,166,0.06); border-left:3px solid var(--accent); border-radius:0 6px 6px 0; padding:16px 18px; margin-bottom:20px; font-size:14px; line-height:1.75; color:#111827; font-weight:400; }
+  .guide-note strong { color:var(--accent); font-weight:600; }
+  .context-grid { display:grid; grid-template-columns:1fr; gap:10px; margin-top:20px; }
+  @media(min-width:480px){.context-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(min-width:700px){.context-grid{grid-template-columns:repeat(3,1fr);}}
+  .context-card { background:var(--card-bg); border-radius:6px; padding:16px; }
+  .ctx-label { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; font-weight:500; }
+  .ctx-colours { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+  .ctx-chip { width:22px; height:22px; border-radius:50%; border:1px solid rgba(17,24,39,0.1); }
+  .ctx-desc { font-size:13px; color:var(--muted); line-height:1.55; }
+  .makeup-section-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:300; letter-spacing:0.03em; color:var(--text); margin-bottom:4px; margin-top:28px; padding-bottom:8px; border-bottom:1px solid rgba(17,24,39,0.1); }
+  .makeup-section-title:first-of-type { margin-top:0; }
+  .makeup-intro { font-size:14px; color:#111827; margin-bottom:14px; line-height:1.7; font-weight:400; }
+  .makeup-card { background:var(--card-bg); border-radius:6px; padding:16px; margin-bottom:10px; }
+  .makeup-card-label { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); font-weight:500; margin-bottom:8px; }
+  .makeup-card-text { font-size:14px; line-height:1.75; color:#111827; font-weight:400; }
+  .makeup-card-text strong { font-weight:600; }
+  .makeup-card-text em { font-style:italic; color:#4A5068; font-size:13px; }
+  .makeup-chips { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+  .makeup-chip { display:flex; align-items:center; gap:6px; background:rgba(255,255,255,0.65); border:1px solid rgba(17,24,39,0.08); border-radius:20px; padding:5px 11px 5px 7px; font-size:12px; color:var(--text); letter-spacing:0.03em; }
+  .makeup-chip-dot { width:16px; height:16px; border-radius:50%; flex-shrink:0; border:1px solid rgba(17,24,39,0.1); }
+  .makeup-tip { background:var(--text); color:var(--bg); border-radius:6px; padding:18px 20px; margin-top:20px; font-size:14px; line-height:1.75; font-weight:400; }
+  .makeup-tip strong { font-weight:600; color:#B0BACF; }
+  .makeup-tip em { font-style:italic; opacity:0.8; }
+  .fs-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; z-index:9999; background:#111; }
+  .fs-overlay.active { display:flex; flex-direction:column; }
+  .fs-colour-block { position:absolute; top:6px; left:6px; right:6px; bottom:6px; z-index:0; pointer-events:none; border-radius:12px; box-shadow:0 4px 32px rgba(17,24,39,0.18); }
+  .fs-tap-zone { position:absolute; top:0; left:0; right:0; bottom:100px; z-index:1; cursor:pointer; }
+  .fs-peek { position:absolute; bottom:0; left:0; right:0; z-index:2; padding:12px 20px 36px; display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .fs-peek-pill { width:36px; height:5px; border-radius:3px; background:rgba(255,255,255,0.4); margin-bottom:2px; cursor:pointer; }
+  .fs-peek-pill.dark { background:rgba(17,24,39,0.2); }
+  .fs-peek-row { width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .fs-peek-name { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:300; color:#fff; display:block; line-height:1.15; }
+  .fs-peek-name.dark { color:#111827; }
+  .fs-peek-hex { font-size:12px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.6); display:block; }
+  .fs-peek-hex.dark { color:rgba(17,24,39,0.5); }
+  .fs-peek-btns { display:flex; gap:10px; flex-shrink:0; }
+  .fs-copy-btn { height:var(--tap-min); padding:0 18px; border-radius:4px; border:1px solid rgba(255,255,255,0.5); background:rgba(255,255,255,0.18); color:#fff; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); font-family:'Jost',sans-serif; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; white-space:nowrap; }
+  .fs-copy-btn.dark { border-color:rgba(17,24,39,0.3); background:rgba(17,24,39,0.12); color:#111827; }
+  .fs-close-btn { width:var(--tap-min); height:var(--tap-min); border-radius:50%; border:1px solid rgba(255,255,255,0.5); background:rgba(255,255,255,0.18); color:#fff; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .fs-close-btn.dark { border-color:rgba(17,24,39,0.3); background:rgba(17,24,39,0.12); color:#111827; }
+  .fs-drawer { position:absolute; bottom:0; left:0; right:0; z-index:3; border-radius:18px 18px 0 0; padding:12px 22px 48px; transform:translateY(100%); transition:transform 0.32s cubic-bezier(0.32,0.72,0,1); box-shadow:0 -6px 40px rgba(17,24,39,0.22); background:rgba(255,255,255,0.98); color:#111827; }
+  .fs-drawer.open { transform:translateY(0); }
+  .fs-drawer-pill { width:36px; height:5px; border-radius:3px; background:rgba(17,24,39,0.15); margin:0 auto 16px; cursor:pointer; }
+  .fs-drawer-name { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; margin-bottom:3px; color:#111827; }
+  .fs-drawer-hex { font-size:12px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.45; margin-bottom:20px; color:#111827; }
+  .fs-rows { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+  .fs-label { font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); font-weight:500; margin-bottom:5px; }
+  .fs-value { font-size:14px; line-height:1.6; color:#111827; }
+  .fs-actions { display:flex; gap:10px; }
+  .fs-copy-btn2 { flex:1; height:var(--tap-min); border-radius:4px; border:none; cursor:pointer; font-family:'Jost',sans-serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; background:var(--text); color:var(--bg); }
+  .fs-close-btn2 { height:var(--tap-min); padding:0 20px; border-radius:4px; cursor:pointer; font-family:'Jost',sans-serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; background:none; border:1px solid rgba(17,24,39,0.2); color:var(--text); }
+  .glow-footer { text-align:center; padding:56px 24px 40px; }
+  .glow-circle { width:120px; height:120px; border-radius:50%; overflow:hidden; margin:0 auto 14px; box-shadow:0 4px 24px rgba(17,24,39,0.13); }
+  .glow-circle img { width:100%; height:100%; object-fit:cover; display:block; }
+  .glow-logo-text { font-family:'Jost',sans-serif; font-size:11px; letter-spacing:0.28em; text-transform:uppercase; color:#4A5068; }
+  .glow-copyright { font-size:11px; color:#8891AA; margin-top:10px; line-height:1.6; max-width:560px; margin-left:auto; margin-right:auto; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">Glow Colour Analysis</div>
+  <h1>True <span>Summer</span></h1>
+  <p class="header-sub">Tap any swatch to explore &middot; Tap again to close</p>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <button class="tab active" onclick="showSection('overview',this)">Overview</button>
+    <button class="tab" onclick="showSection('neutrals',this)">Neutrals</button>
+    <button class="tab" onclick="showSection('basics',this)">Basics</button>
+    <button class="tab" onclick="showSection('accents',this)">Accents</button>
+    <button class="tab" onclick="showSection('power',this)">Power Colours</button>
+    <button class="tab" onclick="showSection('when',this)">When to Wear</button>
+    <button class="tab" onclick="showSection('accessories',this)">Accessories &amp; Eyewear</button>
+    <button class="tab" onclick="showSection('makeup',this)">Makeup &amp; Hair</button>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="section visible" id="section-overview">
+  <div class="dna-banner">
+    <div><div class="dna-key">Undertone</div><div class="dna-val">Cool</div></div>
+    <div><div class="dna-key">Value</div><div class="dna-val">Light to Dark</div></div>
+    <div><div class="dna-key">Intensity</div><div class="dna-val">Soft</div></div>
+  </div>
+  <div class="guide-note">
+    <strong>This is a guide, not a rulebook.</strong> Every colour in your palette can be worn anywhere: clothing, makeup, nail polish, jewellery, eyewear, ties, hats, scarves and beyond. Use this as a reference to understand what works with your natural colouring. Colour analysis is about empowerment, not restriction.
+    <br><br>
+    The True Summer palette contains thousands of colours. The swatches here are carefully chosen examples of what to look for: cool undertone, soft intensity, light to dark value. Use these as a visual compass, not a checklist.
+    <br><br>
+    <strong>Screen tip:</strong> For the most accurate colour reference, turn off your blue light filter and set your screen brightness to around 80 percent or higher. On iPhone look for <strong>Night Shift</strong> under Settings &gt; Display &amp; Brightness. On Samsung look for <strong>Eye Comfort Shield</strong> under Settings &gt; Display.
+    <br><br>
+    <strong>Online shopping tip:</strong> When unsure about a colour, try asking an AI assistant: <em>"Is [Brand] [Product] in [Colour Name] cool or warm toned? Does it suit True Summer?"</em> Keep in mind AI pulls from across the internet and isn't always accurate, since sources can conflict. Always check samples in store when possible.
+  </div>
+  <div class="section-title">Your Full Palette</div>
+  <div class="section-desc">Tap any swatch for a full-screen colour reference · Browse by category in the tabs above</div>
+  <div class="rule-strip" style="margin-bottom:16px;">
+    <p><strong>How to use this palette as a range guide:</strong> Your palette spans from soft whites and crisp cool colours through to deep navy and charcoal, and all of it works for you. Use the lightest swatches as your reference for how light you can go, and the darkest as your reference for how dark you can go. Every colour has a touch of grey in it. That's what makes it yours.</p>
+  </div>
+  <div class="all-grid" id="grid-overview"></div>
+</div>
+
+<!-- FULLSCREEN OVERLAY -->
+<div class="fs-overlay" id="fs-overlay">
+  <div class="fs-colour-block" id="fs-colour-block"></div>
+  <div class="fs-tap-zone" onclick="fsToggleDrawer()"></div>
+  <div class="fs-peek" id="fs-peek">
+    <div class="fs-peek-pill" id="fs-peek-pill" onclick="fsToggleDrawer()"></div>
+    <div class="fs-peek-row">
+      <div>
+        <span class="fs-peek-name" id="fs-name"></span>
+        <span class="fs-peek-hex" id="fs-hex"></span>
+      </div>
+      <div class="fs-peek-btns">
+        <button class="fs-copy-btn" id="fs-copy-btn" onclick="event.stopPropagation();fsCopy()">Copy</button>
+        <button class="fs-close-btn" id="fs-close-btn" onclick="event.stopPropagation();fsClose()">&#x2715;</button>
+      </div>
+    </div>
+  </div>
+  <div class="fs-drawer" id="fs-drawer">
+    <div class="fs-drawer-pill" onclick="fsToggleDrawer()"></div>
+    <div class="fs-drawer-name" id="fs-drawer-name"></div>
+    <div class="fs-drawer-hex" id="fs-drawer-hex"></div>
+    <div class="fs-rows">
+      <div><div class="fs-label">When to Wear</div><div class="fs-value" id="fs-when"></div></div>
+      <div><div class="fs-label">Pair With</div><div class="fs-value" id="fs-pair"></div></div>
+    </div>
+    <div class="fs-actions">
+      <button class="fs-copy-btn2" id="fs-copy-btn2" onclick="fsCopy2()">Copy hex</button>
+      <button class="fs-close-btn2" onclick="fsClose()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEUTRALS -->
+<div class="section" id="section-neutrals">
+  <div class="section-title">Neutrals</div>
+  <div class="section-desc">Your true neutrals: cool whites, greys, and browns. The colours that anchor everything else. Tap any swatch for a full-screen view.</div>
+  <div class="all-grid" id="grid-neutrals"></div>
+</div>
+
+<!-- BASICS -->
+<div class="section" id="section-basics">
+  <div class="section-title">Basics</div>
+  <div class="section-desc">Your blues, greens, purples, and pale blenders: the interchangeable workhorses of your wardrobe. Tap any swatch for a full-screen view.</div>
+  <div class="all-grid" id="grid-basics"></div>
+</div>
+
+<!-- ACCENTS -->
+<div class="section" id="section-accents">
+  <div class="section-title">Accents</div>
+  <div class="section-desc">Your pinks, roses, berries, and reds: the statement colours. Cool, soft intensity. Tap any swatch for a full-screen view.</div>
+  <div class="all-grid" id="grid-accents"></div>
+</div>
+
+<!-- POWER COLOURS -->
+<div class="section" id="section-power">
+  <div class="section-title">Power Colours</div>
+  <div class="section-desc">A curated edit across your entire palette: the most commanding and quietly striking colours for natural confidence. Tap any swatch for a full-screen view.</div>
+  <div class="all-grid" id="grid-power"></div>
+</div>
+
+<!-- WHEN TO WEAR -->
+<div class="section" id="section-when">
+  <div class="section-title">When &amp; Where to Wear Your Colours</div>
+  <div class="section-desc">Match the occasion to your best colours. Every colour works across clothing, accessories, makeup, nails, and beyond.</div>
+  <div class="context-grid">
+    <div class="context-card">
+      <div class="ctx-label">Interviews</div>
+      <div class="ctx-colours">
+        <div class="ctx-chip" style="background:#4B5C74"></div>
+        <div class="ctx-chip" style="background:#5C7890"></div>
+        <div class="ctx-chip" style="background:#7F8A99"></div>
+      </div>
+      <div class="ctx-desc">Soft Navy, Slate Blue, Cool Grey: calm confidence, trustworthy presence</div>
+    </div>
+    <div class="context-card">
+      <div class="ctx-label">Work / Business</div>
+      <div class="ctx-colours">
+        <div class="ctx-chip" style="background:#2A3A50"></div>
+        <div class="ctx-chip" style="background:#404044"></div>
+        <div class="ctx-chip" style="background:#4F7FA3"></div>
+      </div>
+      <div class="ctx-desc">Night Navy, Deep Charcoal, French Blue: polished, composed, approachable</div>
+    </div>
+    <div class="context-card">
+      <div class="ctx-label">Dates &amp; Social</div>
+      <div class="ctx-colours">
+        <div class="ctx-chip" style="background:#E8B8C8"></div>
+        <div class="ctx-chip" style="background:#C58CA6"></div>
+        <div class="ctx-chip" style="background:#7A4868"></div>
+      </div>
+      <div class="ctx-desc">Rose Water, Cool Pink, Deep Berry: romantic, expressive, quietly commanding</div>
+    </div>
+    <div class="context-card">
+      <div class="ctx-label">Branding / Online</div>
+      <div class="ctx-colours">
+        <div class="ctx-chip" style="background:#BFD7ED"></div>
+        <div class="ctx-chip" style="background:#C9CED6"></div>
+        <div class="ctx-chip" style="background:#9FAFE0"></div>
+      </div>
+      <div class="ctx-desc">Powder Blue, Silver Grey, Periwinkle: clean, trustworthy, polished</div>
+    </div>
+    <div class="context-card">
+      <div class="ctx-label">Casual / Everyday</div>
+      <div class="ctx-colours">
+        <div class="ctx-chip" style="background:#7F8A99"></div>
+        <div class="ctx-chip" style="background:#C9CED6"></div>
+        <div class="ctx-chip" style="background:#BDB0CC"></div>
+      </div>
+      <div class="ctx-desc">Cool Grey, Silver Grey, Soft Lavender: effortless, cool, soft without trying</div>
+    </div>
+    <div class="context-card">
+      <div class="ctx-label">Special Occasions</div>
+      <div class="ctx-colours">
+        <div class="ctx-chip" style="background:#7A4868"></div>
+        <div class="ctx-chip" style="background:#7472AC"></div>
+        <div class="ctx-chip" style="background:#6858A0"></div>
+      </div>
+      <div class="ctx-desc">Deep Berry, Blue Violet, Deep Cool Lilac: luminous, graceful, sure to turn heads</div>
+    </div>
+  </div>
+</div>
+
+<!-- ACCESSORIES & EYEWEAR -->
+<div class="section" id="section-accessories">
+  <div class="section-title">Accessories &amp; Eyewear</div>
+  <div class="makeup-tip">
+    <strong>The bigger picture:</strong> Every colour in your palette can be referenced for accessories: jewellery, bags, shoes, scarves, eyewear, ties, hats, nail polish, and more. A dusty rose bag, a powder blue scarf, a soft plum nail, it all works.
+  </div>
+  <div class="makeup-section-title">Jewellery &amp; Metals</div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Your best metals</div>
+    <div class="makeup-chips">
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#A8B0B8;border-color:#aaa"></div>Pewter</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#C0C8D0;border-color:#aaa"></div>Antique Silver</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#B8C4D0;border-color:#aaa"></div>Matte White Gold</div>
+    </div>
+    <div class="makeup-card-text">Pewter, antique silver, and matte white gold all mirror the cool, soft quality of your colouring beautifully. Traditional yellow gold clashes with your natural softness. <em>Tip: pewter or antique silver always works.</em></div>
+  </div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Gemstones &amp; pearls</div>
+    <div class="makeup-chips">
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#9FAFE0"></div>Periwinkle / Sapphire</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#BDB0CC"></div>Lavender / Amethyst</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#CCA0B4"></div>Rose Quartz</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#72A8B8"></div>Aquamarine / Smoky Blue</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#9A8898"></div>Smoky Stone</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#F0EEF0;border-color:#ccc"></div>White Pearl</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#C9CED6;border-color:#aaa"></div>Grey Pearl</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#CCA0B4"></div>Rose Pearl</div>
+    </div>
+    <div class="makeup-card-text">Smoky quartz, grey moonstone, labradorite, muted sapphires, lavender amethyst, and aquamarine are all deeply flattering. Pearls in white, grey, and rose are beautiful. <em>Avoid: amber, coral, warm citrine, or yellow gold settings.</em></div>
+  </div>
+  <div class="makeup-section-title">Eyewear</div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Frame colours that work beautifully</div>
+    <div class="makeup-chips">
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#7F8A99"></div>Soft Grey</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#404044"></div>Charcoal</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#A89F98"></div>Cool Taupe</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#5C7890"></div>Slate Blue</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#C0C8D8;border-color:#aaa"></div>Antique Silver</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#E3E6EB;border-color:#ccc"></div>Transparent Cool</div>
+    </div>
+    <div class="makeup-card-text">Soft grey, charcoal, and cool taupe frames look effortlessly refined. Slate blue is a beautiful expressive choice. <em>Avoid: warm tortoiseshell, golden brown, amber, or orange-toned frames.</em></div>
+  </div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Lens tints for sunglasses</div>
+    <div class="makeup-card-text">Cool grey or soft blue-grey lenses are your most harmonious options. Soft rose or lavender-tinted lenses also work beautifully. <em>Avoid amber, brown, or warm orange lenses.</em></div>
+  </div>
+  <div class="makeup-section-title">Bags &amp; Shoes</div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Your most versatile base choices</div>
+    <div class="makeup-chips">
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#404044"></div>Deep Charcoal</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#C0C8D8;border-color:#aaa"></div>Silver</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#EEEEF2;border-color:#ccc"></div>Soft White</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#3A4E68"></div>Deep Navy</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#7F746E"></div>Cool Cocoa</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#7A4868"></div>Deep Berry</div>
+    </div>
+    <div class="makeup-card-text">Deep charcoal and deep navy are your most powerful versatile bases. Antique silver and soft white are elegant neutrals. Cool cocoa works beautifully: look for no warm red or orange undertone. <em>Avoid: warm tan, camel, golden beige, or warm brown.</em></div>
+  </div>
+  <div class="makeup-section-title">Scarves, Hats &amp; Wraps</div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Near-face accessories matter most</div>
+    <div class="makeup-card-text">Anything worn close to your face has the same impact as a top or blouse. A powder blue scarf, a dusty rose hat, or a lavender wrap near your face will all be flattering. <em>Tip: a cool-toned scarf near the face can transform an otherwise neutral outfit.</em></div>
+  </div>
+  <div class="makeup-section-title">Nail Polish</div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Your best nail colour directions</div>
+    <div class="makeup-chips">
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#CCA0B4"></div>Dusty Rose</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#C58CA6"></div>Cool Pink</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#8C6A8C"></div>Dusty Plum</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#BDB0CC"></div>Soft Lavender</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#C9CED6;border-color:#aaa"></div>Silver Grey</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#E8B8C8"></div>Rose Water</div>
+    </div>
+    <div class="makeup-card-text">Dusty rose, cool pink, soft mauves, lavender, and soft plum are all stunning. For a clean nail, opt for a sheer cool rose or soft pink. <em>Avoid: warm nude, peach, coral, orange, or brown-toned polishes.</em></div>
+  </div>
+  <div class="makeup-section-title">For the Men</div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Ties, pocket squares &amp; accessories</div>
+    <div class="makeup-card-text">The same palette applies. A deep navy or slate blue tie is a classic power choice. Charcoal and soft grey suits are your strongest base. <em>Silver cufflinks over gold. A cool white shirt over cream. A French blue or periwinkle tie over brown or olive.</em></div>
+  </div>
+</div>
+
+<!-- MAKEUP & HAIR -->
+<div class="section" id="section-makeup">
+  <div class="section-title">Makeup &amp; Hair</div>
+  <div class="section-desc">Your True Summer guide to beauty: cool undertone, soft intensity, light to dark value. Products listed are longstanding classics worth looking for.</div>
+  <div class="rule-strip" style="margin-bottom:16px;">
+    <p>Product recommendations are included as a helpful starting point. Always verify before purchasing, as formulas and shade names can change. Check the product description directly, or ask a consultant in store.</p>
+  </div>
+
+  <div class="makeup-section-title">Lips</div>
+  <div class="makeup-intro">Your most flattering lip colours are cool-based and softly pigmented, light to dark. Soft cool rose, cool berry, and muted cool mauve feel effortless on you.</div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Cool Rose &amp; Dusty Pink: your everyday lip</div>
+    <div class="makeup-chips">
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#C8909C"></div>Marcelle Living Rose</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#D4A0A8"></div>ILIA Color Block Rosette</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#C09090"></div>RMS Beauty Wild Roses</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#B05878"></div>Revlon Berry Haute</div>
+    </div>
+    <div class="makeup-card-text">Look for products described as <strong>soft pink, cool rose, or muted mauve</strong>. These are your most wearable everyday options, cool but never stark. <em>Tip: worn lightly, any of these give a beautiful your-lips-but-better result.</em></div>
+  </div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Cool Berry &amp; Soft Mauve: polished and expressive</div>
+    <div class="makeup-chips">
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#906878"></div>NYX Copenhagen</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#A06878"></div>Marcelle Flirting Berry</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#9A7080"></div>MAC Snob</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#906070"></div>ILIA Color Block Wild Aster</div>
+    </div>
+    <div class="makeup-card-text">Look for <strong>cool berry, soft mauve, or muted pink-plum</strong> products. These are your go-to for work, evenings out, and any occasion where you want your lip to say something. <em>Tip: a cool berry lip with minimal eye makeup is a quintessential True Summer look.</em></div>
+  </div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Soft Plum &amp; Dusty Berry: evening depth</div>
+    <div class="makeup-chips">
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#9A5060"></div>NARS Audacious Fanny</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#7A5070"></div>Charlotte Tilbury Viva La Plum</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#5A2038"></div>MAC Disobedient</div>
+    </div>
+    <div class="makeup-card-text">Look for <strong>cool plum, dusty berry, or muted deep rose</strong> colours. These are your evening and occasion choices, cool depth without harshness. <em>Avoid anything with brown, brick, or warm undertones. True Summers can wear red: look for a muted, blue-based red and apply by patting lightly rather than swiping to soften the intensity.</em></div>
+  </div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Your "nude" lip: cool, not beige</div>
+    <div class="makeup-card-text">Warm nudes wash you out. Your version of a natural lip is a <strong>cool pink, soft rose, or sheer berry</strong>. Look for products described as cool rose, cool mauve, or sheer berry. <em>Try: RMS Beauty Wild Roses worn lightly, Marcelle Living Rose, or a cool rose lip liner worn alone.</em></div>
+  </div>
+
+  <div class="makeup-section-title">Blush</div>
+  <div class="makeup-intro">Cool pinks and soft mauves bring a natural flush without warmth. If you enjoy wearing bronzer, choose a cool taupe contour or a very neutral, muted bronzer. Never anything warm, golden, or orange.</div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Go-to blush products</div>
+    <div class="makeup-chips">
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#C4909C"></div>ILIA Multi-Stick At Last</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#B08898"></div>ILIA Color Haze Before Today</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#A05070"></div>ILIA Multi-Stick A Fine Romance</div>
+      <div class="makeup-chip"><div class="makeup-chip-dot" style="background:#B07080"></div>Physicians Formula Blushing Berry</div>
+    </div>
+    <div class="makeup-card-text">Look for <strong>cool pink, cool rose, or muted berry blush</strong>. Avoid peach, coral, bronze, or terracotta. <em>Tip: a multi-stick used on lips and cheeks creates a beautifully cohesive cool look.</em></div>
+  </div>
+
+  <div class="makeup-section-title">Foundation &amp; Tinted Moisturiser</div>
+  <div class="makeup-intro">Foundation rule: cool undertone first.</div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">What to look for</div>
+    <div class="makeup-card-text">This applies across every skin tone and depth. If you can't find a perfect cool match, a <strong>cool-neutral</strong> is your next best option. Avoid anything described as warm, golden, yellow, or honey. <em>Tip: swatch on your jawline in natural light. A match that blends seamlessly is right; one that pulls orange, red, or yellow is too warm.</em></div>
+  </div>
+
+  <div class="makeup-section-title">Eyes</div>
+  <div class="makeup-intro">Your eyes have real room to play in the blues, purples, and cool greys. A soft eye works beautifully with a bolder lip.</div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Eyeshadow: what works</div>
+    <div class="makeup-card-text"><strong>Base eyeshadow:</strong> soft white, cool rose beige, silver grey, pale lavender. <strong>Depth:</strong> cool taupe, smoky mauve, grey, soft navy, dusty violet, charcoal. <strong>Accents:</strong> soft silver, pale lavender, dusty mauve, slate blue. <em>Avoid: gold, bronze, warm brown, terracotta, peach, or any warm metallic.</em></div>
+  </div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Eyeliner</div>
+    <div class="makeup-card-text">Soft charcoal, cool grey, slate, or navy are your most versatile liners, each giving a different softness and depth. <em>Tip: a softly smudged charcoal liner with a dusty rose lip creates an effortlessly elegant, understated finish.</em></div>
+  </div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Mascara</div>
+    <div class="makeup-card-text"><strong>Soft black, dark navy, or cool dark brown mascara</strong> are your best choices. Warm brown mascara can introduce unwanted warmth. Cool dark brown, charcoal, or navy all work beautifully depending on your contrast level.</div>
+  </div>
+
+  <div class="makeup-section-title">Brows &amp; Beard</div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Brow &amp; beard guidance</div>
+    <div class="makeup-card-text">Match your brow product to your natural hair colour or go one shade darker. Look for cool taupe, cool medium brown, or cool dark brown depending on your depth. Avoid anything warm, golden, auburn, or reddish-toned. <em>Tip: ask for "cool" or "cool-toned" when shopping brow pencils or powders.</em></div>
+  </div>
+
+  <div class="makeup-section-title">Hair Colour</div>
+  <div class="makeup-intro">Your most beautiful hair colour is often the one you were born with.</div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Your best hair colours</div>
+    <div class="makeup-card-text"><strong>Your naturals:</strong> cool blonde through cool medium brown and cool dark brown, as long as the tone stays cool. A cool or neutral chocolate brown can work beautifully, provided it doesn't pull warm, red, or golden. <em>Avoid: golden highlights, copper, warm auburn, caramel, or honey.</em></div>
+  </div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">Embracing silver &amp; grey</div>
+    <div class="makeup-card-text">Silver and grey hair can be absolutely stunning on True Summer. <em>Tip: a purple or blue toning shampoo keeps it cool and luminous rather than yellow.</em></div>
+  </div>
+  <div class="makeup-card">
+    <div class="makeup-card-label">What to ask your colourist</div>
+    <div class="makeup-card-text">Ask for <strong>"cool toned," "no warmth,"</strong> or show them your palette directly. <em>Tip: when in doubt, go cooler and softer rather than warmer and brighter.</em></div>
+  </div>
+</div>
+
+<div class="glow-footer">
+  <div class="glow-circle"><img src="logo.png" alt="Glow Colour Analysis"></div>
+  <div class="glow-logo-text">True Summer Colour Palette &middot; Glow Colour Analysis</div>
+  <p class="glow-copyright">&copy; 2025 Glow Colour Analysis &middot; glowcolouranalysis.com &middot; This palette guide is the original work of Glow Colour Analysis and is protected by copyright. It is intended for personal use only and may not be reproduced, redistributed, or used commercially without written permission.</p>
+</div>
+
+<script>
+const allColours77 = [
+  { name:"Soft White", hex:"#EEEEF2", when:"Your coolest white — a soft milky white that reads clean and cool without going stark", pair:"Deep navy, deep charcoal, dusty rose" },
+  { name:"Cloud Grey", hex:"#D4D9E0", when:"A soft cool cloud grey that pairs with everything in your palette", pair:"French blue, cool mauve, deep charcoal" },
+  { name:"Silver Grey", hex:"#C9CED6", when:"A cool silver grey, your most versatile everyday neutral", pair:"Deep navy, cool berry, powder blue" },
+  { name:"Cloud Blue Grey", hex:"#CBD6DF", when:"A soft cloud blue-grey — sits beautifully between your greys and blues", pair:"Deep charcoal, dusty rose, soft navy" },
+  { name:"Blue Grey", hex:"#8A9BAA", when:"A cool blue-grey, grounded and naturally polished", pair:"Soft white, dusty rose, cool berry" },
+  { name:"Cool Grey", hex:"#7F8A99", when:"A cool grey — professional, polished, and effortlessly cool", pair:"Soft white, powder blue, dusty plum" },
+  { name:"Champagne Taupe", hex:"#C8B4B2", when:"A soft rose taupe — cool, lifted, and naturally flattering. Beautiful for bags, shoes, and casual pieces", pair:"Cool grey, silver grey, dusty rose" },
+  { name:"Rose Brown", hex:"#9A8480", when:"A soft rose-tinged cool brown — subtle and deeply flattering on Summer", pair:"Silver grey, soft white, pale rose" },
+  { name:"Cool Cocoa", hex:"#7F746E", when:"A cool-neutral cocoa brown, your warmest neutral and still beautifully flattering", pair:"Silver grey, soft rose, soft white" },
+  { name:"Ash Brown", hex:"#5A5250", when:"A neutral cool brown — your deepest brown neutral, genuinely cool without going purple", pair:"Silver grey, soft white, soft rose" },
+  { name:"Deep Charcoal", hex:"#404044", when:"A cool charcoal — suits, structured coats, and your most grounded professional neutral", pair:"Soft white, powder blue, dusty rose" },
+  { name:"Soft Lavender Mist", hex:"#DDD6EA", when:"A barely-there lavender mist — your most ethereal light purple", pair:"Cool slate, deep navy, cool berry" },
+  { name:"Misty Lilac Grey", hex:"#C8C2D6", when:"A soft lilac grey that sits quietly and works with everything", pair:"Cool slate, deep charcoal, cool berry" },
+  { name:"Soft Lavender", hex:"#BDB0CC", when:"A soft cool lavender, gently purple and beautifully flattering", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Mauve Mist", hex:"#C5B1C8", when:"A cool mauve mist — sits between purple and pink, quietly sophisticated", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Cool Mauve", hex:"#B8A4C4", when:"A soft cool mauve that bridges your purples and pinks beautifully", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Dusty Violet", hex:"#9080A8", when:"A softened dusty violet — your most wearable everyday purple", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Dusty Plum", hex:"#8C6A8C", when:"A cool dusty plum — graceful depth for evenings and special occasions", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Soft Wisteria", hex:"#A294C0", when:"A soft wisteria purple, dreamy and distinctly cool Summer", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Soft Iris", hex:"#928EC0", when:"A cool soft iris purple — quietly expressive and beautifully balanced", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Soft Violet", hex:"#8878C0", when:"A soft cool violet, gently muted and beautifully balanced", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Blue Violet", hex:"#7472AC", when:"A cool blue-violet — one of your most distinctive and beautiful basics", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Deep Lavender", hex:"#7868A8", when:"A deep cool lavender with genuine presence and depth", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Deep Cool Lilac", hex:"#6858A0", when:"A deep cool lilac — your richest purple basic", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Soft Purple", hex:"#6A5090", when:"A cool true purple, gently muted and beautifully balanced", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Cool Violet", hex:"#7A5080", when:"A cool red-violet purple, medium depth and gently muted", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Dusk Mauve", hex:"#6A5873", when:"A deep cool blue-mauve — graceful evening depth, distinctly cool and Summer", pair:"Silver grey, soft white, soft rose" },
+  { name:"Sage Blue Green", hex:"#6F8F8C", when:"A cool sage blue-green, your lightest and most natural green", pair:"Silver grey, soft white, dusty rose" },
+  { name:"Cool Forest Green", hex:"#4A7060", when:"A cool forest green — your most natural and deeply flattering green", pair:"Silver grey, soft white, dusty rose" },
+  { name:"Blue Spruce", hex:"#4F6F73", when:"A cool blue-spruce green, grounded and quietly distinctive", pair:"Silver grey, soft white, soft rose" },
+  { name:"Soft Teal", hex:"#5A9090", when:"A soft cool teal — casual, layerable, and naturally flattering", pair:"Silver grey, soft white, dusty rose" },
+  { name:"Cool Teal", hex:"#3A7A80", when:"A deeper cool teal with quiet presence and natural authority", pair:"Silver grey, soft white, soft rose" },
+  { name:"Summer Teal", hex:"#3F7F8C", when:"A cool summer teal, vivid and naturally flattering", pair:"Silver grey, soft white, dusty rose" },
+  { name:"Smoky Teal", hex:"#4F7F86", when:"A smoky cool teal with depth and softness", pair:"Silver grey, soft white, soft rose" },
+  { name:"Cool Aqua", hex:"#72A8B8", when:"A cool aqua, softened and distinctly Summer", pair:"Deep charcoal, cool slate, soft white" },
+  { name:"Deep Summer Teal", hex:"#2E6878", when:"Your deepest teal — quietly commanding and beautifully cool", pair:"Silver grey, soft white, dusty rose" },
+  { name:"Pale Periwinkle", hex:"#D4DCEE", when:"A pale cool periwinkle, lighter and softer than your deeper basics", pair:"Deep charcoal, cool slate, dusty rose" },
+  { name:"Misty Sky", hex:"#C9D9E8", when:"A pale cool sky blue — fresh and naturally cool", pair:"Cool slate, deep charcoal, deep navy" },
+  { name:"Powder Blue", hex:"#BFD7ED", when:"A soft cool powder blue — one of your most naturally flattering light tones", pair:"Deep charcoal, cool berry, dusty plum" },
+  { name:"Soft Cornflower", hex:"#A8C0DC", when:"A soft cool cornflower blue — casual, layerable, and distinctly Summer", pair:"Deep charcoal, cool slate, cool berry" },
+  { name:"Periwinkle", hex:"#9FAFE0", when:"A classic cool periwinkle — one of your most signature True Summer colours", pair:"Deep charcoal, cool slate, dusty rose" },
+  { name:"Hydrangea", hex:"#9AA7D8", when:"A cool hydrangea blue-purple, softened and naturally Summer", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Stormy Periwinkle", hex:"#7F8FC7", when:"A stormy periwinkle with cool depth and natural presence", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Summer Periwinkle", hex:"#B7C6E3", when:"A soft cool periwinkle blue, one of your most naturally flattering blues", pair:"Deep charcoal, cool slate, dusty rose" },
+  { name:"Dusty Periwinkle", hex:"#C0C4DC", when:"A softened periwinkle that bridges your blues and purples", pair:"Deep charcoal, cool slate, cool berry" },
+  { name:"Deep Periwinkle", hex:"#6878B8", when:"A deeper cool periwinkle with quiet authority", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Dusty Blue", hex:"#8AABBF", when:"A soft dusty blue that is completely and distinctly yours", pair:"Deep charcoal, cool slate, soft rose" },
+  { name:"Cornflower Blue", hex:"#6FA8C9", when:"A classic cool cornflower blue — one of your signature Summer colours", pair:"Deep charcoal, soft white, dusty rose" },
+  { name:"Soft Denim", hex:"#7090A8", when:"A cool soft denim — your most relaxed and wearable blue", pair:"Silver grey, soft white, dusty rose" },
+  { name:"Storm Blue", hex:"#5F7F99", when:"A cool mid-blue with gentle depth — grounded and naturally polished", pair:"Silver grey, soft white, dusty rose" },
+  { name:"Slate Blue", hex:"#5C7890", when:"A cool slate blue, grounded and endlessly wearable", pair:"Silver grey, soft white, dusty rose" },
+  { name:"French Blue Deep", hex:"#5D8AA8", when:"A slightly deeper French blue, sophisticated and naturally cool", pair:"Silver grey, soft white, dusty rose" },
+  { name:"French Blue", hex:"#4F7FA3", when:"A classic cool French blue — your most iconic and versatile blue", pair:"Silver grey, soft white, dusty rose" },
+  { name:"Deep Blue Grey", hex:"#4A6880", when:"A deep cool blue-grey with quiet authority", pair:"Silver grey, soft white, dusty rose" },
+  { name:"Steel Blue", hex:"#3D4F62", when:"A deep cool steel blue — sits between slate and navy, quietly authoritative", pair:"Silver grey, soft white, cool mauve" },
+  { name:"Soft Navy", hex:"#4B5C74", when:"Your everyday navy — softened and Summer-perfect for blazers and jackets", pair:"Silver grey, soft white, dusty rose" },
+  { name:"Deep Navy", hex:"#3A4E68", when:"A deeper grayed navy with more weight and presence", pair:"Silver grey, soft white, soft rose" },
+  { name:"Night Navy", hex:"#2A3A50", when:"Your deepest navy — almost a blue-black, cool and grayed with quiet authority", pair:"Silver grey, soft white, soft rose" },
+  { name:"Pale Rose", hex:"#E8D0D8", when:"Your softest pale rose — a barely-there pink that glows near your face", pair:"Deep navy, deep charcoal, dusty rose" },
+  { name:"Rose Water", hex:"#E8B8C8", when:"A delicate cool rose water, luminous and softly flattering", pair:"Deep navy, deep charcoal, dusty plum" },
+  { name:"Blush Mauve", hex:"#CCAAB8", when:"A soft blush mauve that bridges your pinks and purples beautifully", pair:"Deep charcoal, cool slate, deep navy" },
+  { name:"Pale Mauve", hex:"#CEBAC8", when:"A pale cool mauve — softly pink and effortlessly flattering", pair:"Deep charcoal, cool slate, deep navy" },
+  { name:"Soft Rose", hex:"#D9A6B3", when:"A soft cool rose, your most versatile everyday accent", pair:"Cool slate, deep charcoal, deep navy" },
+  { name:"Dusty Rose", hex:"#CCA0B4", when:"A classic dusty rose — one of the most naturally flattering colours for True Summer", pair:"Cool slate, deep charcoal, deep navy" },
+  { name:"Rose Mauve", hex:"#C98FA1", when:"A soft cool mauve — sitting beautifully between pink and purple, quietly expressive and flattering near the face", pair:"Cool slate, deep charcoal, deep navy" },
+  { name:"Cool Slate Rose", hex:"#B898A8", when:"A cool slate rose — your most neutral-adjacent accent", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Steel Rose", hex:"#A07888", when:"A cool steel rose with quiet depth, beautifully understated", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Slate Mauve", hex:"#9A8898", when:"A cool slate mauve that blends effortlessly with your neutrals", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Cool Pink", hex:"#C58CA6", when:"A soft cool berry, expressive and naturally flattering", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Soft Fuchsia", hex:"#B87BA1", when:"A softened cool fuchsia — vivid but still distinctly Summer", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Soft Burgundy", hex:"#4D1E21", when:"A muted cool red — composed and quietly striking, a softer everyday red for True Summer", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Deep Berry", hex:"#7A4868", when:"A deep cool berry for evenings and special occasions", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Muted Berry", hex:"#A05C7A", when:"A muted cool berry with genuine depth and presence", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Cool Cranberry", hex:"#9E4F6B", when:"A cool cranberry with depth and quiet confidence", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Cool Berry Dark", hex:"#7A3E52", when:"A deep cool berry — your deepest and most commanding accent", pair:"Silver grey, soft white, soft rose" },
+  { name:"Crimson", hex:"#891D24", when:"A cool true red — your most purely red accent, softened just enough to stay Summer", pair:"Cool slate, deep charcoal, soft white" },
+  { name:"Cool Red", hex:"#7A3035", when:"A muted cool red — composed and quietly striking, a softer everyday red for True Summer", pair:"Deep charcoal, soft white, pewter blue" }
+];
+
+const customOrderMap = {};
+customOrderMap['#EEEEF2'] = 0;
+customOrderMap['#D4D9E0'] = 1;
+customOrderMap['#C9CED6'] = 2;
+customOrderMap['#8A9BAA'] = 3;
+customOrderMap['#7F8A99'] = 4;
+customOrderMap['#C8B4B2'] = 5;
+customOrderMap['#9A8480'] = 6;
+customOrderMap['#7F746E'] = 7;
+customOrderMap['#5A5250'] = 8;
+customOrderMap['#E8D0D8'] = 9;
+customOrderMap['#E8B8C8'] = 10;
+customOrderMap['#CCAAB8'] = 11;
+customOrderMap['#CEBAC8'] = 12;
+customOrderMap['#D9A6B3'] = 13;
+customOrderMap['#CCA0B4'] = 14;
+customOrderMap['#C98FA1'] = 15;
+customOrderMap['#B898A8'] = 16;
+customOrderMap['#A07888'] = 17;
+customOrderMap['#9A8898'] = 18;
+customOrderMap['#C58CA6'] = 19;
+customOrderMap['#B87BA1'] = 20;
+customOrderMap['#7A4868'] = 21;
+customOrderMap['#A05C7A'] = 22;
+customOrderMap['#9E4F6B'] = 23;
+customOrderMap['#7A3E52'] = 24;
+customOrderMap['#7A3035'] = 25;
+customOrderMap['#891D24'] = 26;
+customOrderMap['#4D1E21'] = 27;
+customOrderMap['#DDD6EA'] = 28;
+customOrderMap['#C8C2D6'] = 29;
+customOrderMap['#C5B1C8'] = 30;
+customOrderMap['#BDB0CC'] = 31;
+customOrderMap['#C0C4DC'] = 32;
+customOrderMap['#B8A4C4'] = 33;
+customOrderMap['#9080A8'] = 34;
+customOrderMap['#8C6A8C'] = 35;
+customOrderMap['#A294C0'] = 36;
+customOrderMap['#928EC0'] = 37;
+customOrderMap['#8878C0'] = 38;
+customOrderMap['#7472AC'] = 39;
+customOrderMap['#7868A8'] = 40;
+customOrderMap['#6858A0'] = 41;
+customOrderMap['#6A5090'] = 42;
+customOrderMap['#7A5080'] = 43;
+customOrderMap['#6A5873'] = 44;
+customOrderMap['#6F8F8C'] = 45;
+customOrderMap['#4A7060'] = 46;
+customOrderMap['#4F6F73'] = 47;
+customOrderMap['#5A9090'] = 48;
+customOrderMap['#3A7A80'] = 49;
+customOrderMap['#3F7F8C'] = 50;
+customOrderMap['#4F7F86'] = 51;
+customOrderMap['#72A8B8'] = 52;
+customOrderMap['#2E6878'] = 53;
+customOrderMap['#D4DCEE'] = 54;
+customOrderMap['#CBD6DF'] = 55;
+customOrderMap['#C9D9E8'] = 56;
+customOrderMap['#BFD7ED'] = 57;
+customOrderMap['#B7C6E3'] = 58;
+customOrderMap['#9AA7D8'] = 59;
+customOrderMap['#9FAFE0'] = 60;
+customOrderMap['#7F8FC7'] = 61;
+customOrderMap['#6878B8'] = 62;
+customOrderMap['#A8C0DC'] = 63;
+customOrderMap['#8AABBF'] = 64;
+customOrderMap['#6FA8C9'] = 65;
+customOrderMap['#7090A8'] = 66;
+customOrderMap['#5F7F99'] = 67;
+customOrderMap['#5C7890'] = 68;
+customOrderMap['#5D8AA8'] = 69;
+customOrderMap['#4F7FA3'] = 70;
+customOrderMap['#4A6880'] = 71;
+customOrderMap['#3D4F62'] = 72;
+customOrderMap['#4B5C74'] = 73;
+customOrderMap['#3A4E68'] = 74;
+customOrderMap['#2A3A50'] = 75;
+customOrderMap['#404044'] = 76;
+
+
+const allColours = [...allColours77].sort((a,b) => {
+  const ai = customOrderMap[a.hex] !== undefined ? customOrderMap[a.hex] : 9999;
+  const bi = customOrderMap[b.hex] !== undefined ? customOrderMap[b.hex] : 9999;
+  if(ai === 9999 && bi === 9999) return getLightness(b.hex) - getLightness(a.hex);
+  return ai - bi;
+});
+
+const neutrals = [
+  '#EEEEF2','#D4D9E0','#C9CED6','#8A9BAA','#7F8A99',
+  '#C8B4B2','#9A8480','#7F746E','#5A5250',
+  '#2A3A50','#404044'
+];
+
+const basics = [
+  // Purples & lavenders
+  '#DDD6EA','#C8C2D6','#C5B1C8','#BDB0CC','#C0C4DC','#B8A4C4',
+  '#9080A8','#8C6A8C','#A294C0','#928EC0','#8878C0',
+  '#7472AC','#7868A8','#6858A0','#6A5090','#7A5080','#6A5873',
+  // Greens & teals
+  '#6F8F8C','#4A7060','#4F6F73','#5A9090','#3A7A80','#4F7F86',
+  // Blues
+  '#D4DCEE','#C9D9E8','#BFD7ED','#9AA7D8','#9FAFE0','#6878B8',
+  '#A8C0DC','#6FA8C9','#7090A8','#5F7F99','#5D8AA8','#4F7FA3','#3A4E68'
+];
+
+const accents = [
+  '#E8D0D8','#E8B8C8','#CCAAB8','#D9A6B3','#CCA0B4',
+  '#C98FA1','#B898A8','#A07888','#C58CA6','#B87BA1',
+  '#7A4868','#A05C7A','#9E4F6B','#7A3E52',
+  '#7A3035','#891D24','#4D1E21'
+];
+
+const power = [
+  '#7A5080','#6A5873','#3A7A80','#5A9090',
+  '#5F7F99','#3A4E68','#2A3A50',
+  '#C58CA6','#7A3E52','#891D24','#404044'
+];
+
+const colourLookup = {};
+allColours77.forEach(c => colourLookup[c.hex] = c);
+
+function getLightness(hex){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return(r*299+g*587+b*114)/1000;
+}
+
+function buildGrid(id, colours){
+  const g=document.getElementById(id);
+  if(!g)return;
+  const items=colours.map(c=>typeof c==='string'?colourLookup[c]:c).filter(Boolean);
+  g.innerHTML=items.map(c=>`
+    <div class="swatch-card" onclick="fsOpen('${c.hex}','${c.name.replace(/'/g,"\\'")}','${c.when.replace(/'/g,"\\'")}','${c.pair.replace(/'/g,"\\'")}')">
+      <div class="swatch-colour" style="background:${c.hex}"></div>
+      <div class="swatch-base">
+        <div class="swatch-name">${c.name}</div>
+        <div class="swatch-hex">${c.hex}</div>
+      </div>
+    </div>`).join('');
+}
+
+buildGrid('grid-overview',allColours);
+buildGrid('grid-neutrals',neutrals);
+buildGrid('grid-basics',basics);
+buildGrid('grid-accents',accents);
+buildGrid('grid-power',power);
+
+let _hex='';
+function fsOpen(hex,name,when,pair){
+  _hex=hex;
+  const dark=getLightness(hex)<140;
+  document.getElementById('fs-colour-block').style.background=hex;
+  document.getElementById('fs-name').textContent=name;
+  document.getElementById('fs-hex').textContent=hex;
+  document.getElementById('fs-when').textContent=when;
+  document.getElementById('fs-pair').textContent=pair;
+  document.getElementById('fs-drawer-name').textContent=name;
+  document.getElementById('fs-drawer-hex').textContent=hex;
+  document.getElementById('fs-copy-btn').textContent='Copy';
+  document.getElementById('fs-copy-btn2').textContent='Copy '+hex;
+  ['fs-name','fs-hex','fs-copy-btn','fs-close-btn','fs-peek-pill'].forEach(id=>{
+    const el=document.getElementById(id);
+    const base={'fs-name':'fs-peek-name','fs-hex':'fs-peek-hex','fs-copy-btn':'fs-copy-btn','fs-close-btn':'fs-close-btn','fs-peek-pill':'fs-peek-pill'}[id];
+    el.className=dark?base:base+' dark';
+  });
+  document.getElementById('fs-drawer').classList.remove('open');
+  document.getElementById('fs-overlay').classList.add('active');
+  document.body.style.overflow='hidden';
+}
+function fsToggleDrawer(){document.getElementById('fs-drawer').classList.toggle('open');}
+function fsClose(){
+  document.getElementById('fs-overlay').classList.remove('active');
+  document.getElementById('fs-drawer').classList.remove('open');
+  document.body.style.overflow='';
+}
+function fsCopy(){
+  navigator.clipboard.writeText(_hex).then(()=>{
+    const b=document.getElementById('fs-copy-btn');
+    b.textContent='\u2713'; setTimeout(()=>b.textContent='Copy',1600);
+  });
+}
+function fsCopy2(){
+  navigator.clipboard.writeText(_hex).then(()=>{
+    const b=document.getElementById('fs-copy-btn2');
+    b.textContent='Copied!'; b.style.background='#4A5068';
+    setTimeout(()=>{b.textContent='Copy '+_hex; b.style.background='';},1800);
+  });
+}
+function showSection(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('visible'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('visible');
+  el.classList.add('active');
+  el.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
